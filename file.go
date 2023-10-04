@@ -8,15 +8,7 @@ import (
 	"sort"
 	"strings"
 	"unicode"
-
-	"github.com/pkoukk/tiktoken-go"
 )
-
-var tke *tiktoken.Tiktoken
-
-func init() {
-	tke, _ = tiktoken.GetEncoding("cl100k_base")
-}
 
 // ClocFile is collecting to line count result.
 type ClocFile struct {
@@ -105,7 +97,7 @@ func AnalyzeReader(filename string, language *Language, file io.Reader, opts *Cl
 scannerloop:
 	for scanner.Scan() {
 		lineOrg := scanner.Text()
-		tokens := tke.Encode(lineOrg, nil, nil)
+		tokens := opts.Tokenizer.Encode(lineOrg, nil, nil)
 		clocFile.Tokens += int32(len(tokens))
 		line := strings.TrimSpace(lineOrg)
 
