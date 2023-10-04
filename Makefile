@@ -2,10 +2,10 @@
 
 build:
 	mkdir -p bin
-	GO111MODULE=on go build -o ./bin/gocloc cmd/gocloc/main.go
+	GO111MODULE=on go build -o ./bin/ctoc cmd/ctoc/main.go
 
 update-package:
-	GO111MODULE=on go get -u github.com/hhatto/gocloc
+	GO111MODULE=on go get -u github.com/yaohui-wyh/ctoc
 
 cleanup-package:
 	GO111MODULE=on go mod tidy

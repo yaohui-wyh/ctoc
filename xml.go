@@ -1,4 +1,4 @@
-package gocloc
+package ctoc
 
 import (
 	"encoding/xml"

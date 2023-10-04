@@ -34,7 +34,7 @@ jobs:
       run: go mod download
 
     - name: Build
-      run: go build -o ./bin/gocloc cmd/gocloc/main.go
+      run: go build -o ./bin/ctoc cmd/ctoc/main.go
 
     - name: Check imports
       shell: bash

@@ -1,4 +1,4 @@
-package gocloc
+package ctoc
 
 import (
 	"bufio"
@@ -8,7 +8,15 @@ import (
 	"sort"
 	"strings"
 	"unicode"
+
+	"github.com/pkoukk/tiktoken-go"
 )
+
+var tke *tiktoken.Tiktoken
+
+func init() {
+	tke, _ = tiktoken.GetEncoding("cl100k_base")
+}
 
 // ClocFile is collecting to line count result.
 type ClocFile struct {
@@ -17,6 +25,7 @@ type ClocFile struct {
 	Blanks   int32  `xml:"blank,attr" json:"blank"`
 	Name     string `xml:"name,attr" json:"name"`
 	Lang     string `xml:"language,attr" json:"language"`
+	Tokens   int32  `xml:"tokens,attr" json:"tokens"`
 }
 
 // ClocFiles is gocloc result set.
@@ -89,6 +98,8 @@ func AnalyzeReader(filename string, language *Language, file io.Reader, opts *Cl
 scannerloop:
 	for scanner.Scan() {
 		lineOrg := scanner.Text()
+		tokens := tke.Encode(lineOrg, nil, nil)
+		clocFile.Tokens += int32(len(tokens))
 		line := strings.TrimSpace(lineOrg)
 
 		if len(strings.TrimSpace(line)) == 0 {

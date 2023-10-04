@@ -1,4 +1,4 @@
-package gocloc
+package ctoc
 
 // JSONLanguagesResult defines the result of the analysis in JSON format.
 type JSONLanguagesResult struct {

@@ -7,8 +7,8 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/hhatto/gocloc"
 	"github.com/jessevdk/go-flags"
+	"github.com/yaohui-wyh/ctoc"
 )
 
 // Version is version string for gocloc command
@@ -31,12 +31,12 @@ const OutputTypeJSON string = "json"
 
 const fileHeader string = "File"
 const languageHeader string = "Language"
-const commonHeader string = "files          blank        comment           code"
+const commonHeader string = "files          blank        comment           code           tokens"
 const defaultOutputSeparator string = "-------------------------------------------------------------------------" +
 	"-------------------------------------------------------------------------" +
 	"-------------------------------------------------------------------------"
 
-var rowLen = 79
+var rowLen = 96
 
 // CmdOptions is gocloc command options.
 // It is necessary to use notation that follows go-flags.
@@ -58,10 +58,10 @@ type CmdOptions struct {
 
 type outputBuilder struct {
 	opts   *CmdOptions
-	result *gocloc.Result
+	result *ctoc.Result
 }
 
-func newOutputBuilder(result *gocloc.Result, opts *CmdOptions) *outputBuilder {
+func newOutputBuilder(result *ctoc.Result, opts *CmdOptions) *outputBuilder {
 	return &outputBuilder{
 		opts,
 		result,
@@ -92,22 +92,22 @@ func (o *outputBuilder) WriteFooter() {
 	if o.opts.OutputType == OutputTypeDefault {
 		fmt.Printf("%.[2]*[1]s\n", defaultOutputSeparator, rowLen)
 		if o.opts.ByFile {
-			fmt.Printf("%-[1]*[2]v %6[3]v %14[4]v %14[5]v %14[6]v\n",
-				maxPathLen, "TOTAL", total.Total, total.Blanks, total.Comments, total.Code)
+			fmt.Printf("%-[1]*[2]v %6[3]v %14[4]v %14[5]v %14[6]v %14[7]v\n",
+				maxPathLen, "TOTAL", total.Total, total.Blanks, total.Comments, total.Code, total.Tokens)
 		} else {
-			fmt.Printf("%-27v %6v %14v %14v %14v\n",
-				"TOTAL", total.Total, total.Blanks, total.Comments, total.Code)
+			fmt.Printf("%-27v %6v %14v %14v %14v %14v\n",
+				"TOTAL", total.Total, total.Blanks, total.Comments, total.Code, total.Tokens)
 		}
 		fmt.Printf("%.[2]*[1]s\n", defaultOutputSeparator, rowLen)
 	}
 }
 
-func writeResultWithByFile(opts *CmdOptions, result *gocloc.Result) {
+func writeResultWithByFile(opts *CmdOptions, result *ctoc.Result) {
 	clocFiles := result.Files
 	total := result.Total
 	maxPathLen := result.MaxPathLength
 
-	var sortedFiles gocloc.ClocFiles
+	var sortedFiles ctoc.ClocFiles
 	for _, file := range clocFiles {
 		sortedFiles = append(sortedFiles, *file)
 	}
@@ -124,16 +124,16 @@ func writeResultWithByFile(opts *CmdOptions, result *gocloc.Result) {
 
 	switch opts.OutputType {
 	case OutputTypeClocXML:
-		t := gocloc.XMLTotalFiles{
+		t := ctoc.XMLTotalFiles{
 			Code:    total.Code,
 			Comment: total.Comments,
 			Blank:   total.Blanks,
 		}
-		f := &gocloc.XMLResultFiles{
+		f := &ctoc.XMLResultFiles{
 			Files: sortedFiles,
 			Total: t,
 		}
-		xmlResult := gocloc.XMLResult{
+		xmlResult := ctoc.XMLResult{
 			XMLFiles: f,
 		}
 		xmlResult.Encode()
@@ -150,7 +150,7 @@ func writeResultWithByFile(opts *CmdOptions, result *gocloc.Result) {
 				file.Code, file.Lang, p, file.Name)
 		}
 	case OutputTypeJSON:
-		jsonResult := gocloc.NewJSONFilesResultFromCloc(total, sortedFiles)
+		jsonResult := ctoc.NewJSONFilesResultFromCloc(total, sortedFiles)
 		buf, err := json.Marshal(jsonResult)
 		if err != nil {
 			fmt.Println(err)
@@ -160,8 +160,8 @@ func writeResultWithByFile(opts *CmdOptions, result *gocloc.Result) {
 	default:
 		for _, file := range sortedFiles {
 			clocFile := file
-			fmt.Printf("%-[1]*[2]s %21[3]v %14[4]v %14[5]v\n",
-				maxPathLen, file.Name, clocFile.Blanks, clocFile.Comments, clocFile.Code)
+			fmt.Printf("%-[1]*[2]s %21[3]v %14[4]v %14[5]v %14[6]v\n",
+				maxPathLen, file.Name, clocFile.Blanks, clocFile.Comments, clocFile.Code, clocFile.Tokens)
 		}
 	}
 }
@@ -176,7 +176,7 @@ func (o *outputBuilder) WriteResult() {
 	if o.opts.ByFile {
 		writeResultWithByFile(o.opts, o.result)
 	} else {
-		var sortedLanguages gocloc.Languages
+		var sortedLanguages ctoc.Languages
 		for _, language := range clocLangs {
 			if len(language.Files) != 0 {
 				sortedLanguages = append(sortedLanguages, *language)
@@ -197,10 +197,10 @@ func (o *outputBuilder) WriteResult() {
 
 		switch o.opts.OutputType {
 		case OutputTypeClocXML:
-			xmlResult := gocloc.NewXMLResultFromCloc(total, sortedLanguages, gocloc.XMLResultWithLangs)
+			xmlResult := ctoc.NewXMLResultFromCloc(total, sortedLanguages, ctoc.XMLResultWithLangs)
 			xmlResult.Encode()
 		case OutputTypeJSON:
-			jsonResult := gocloc.NewJSONLanguagesResultFromCloc(total, sortedLanguages)
+			jsonResult := ctoc.NewJSONLanguagesResultFromCloc(total, sortedLanguages)
 			buf, err := json.Marshal(jsonResult)
 			if err != nil {
 				fmt.Println(err)
@@ -209,8 +209,8 @@ func (o *outputBuilder) WriteResult() {
 			os.Stdout.Write(buf)
 		default:
 			for _, language := range sortedLanguages {
-				fmt.Printf("%-27v %6v %14v %14v %14v\n",
-					language.Name, len(language.Files), language.Blanks, language.Comments, language.Code)
+				fmt.Printf("%-27v %6v %14v %14v %14v %14v\n",
+					language.Name, len(language.Files), language.Blanks, language.Comments, language.Code, language.Tokens)
 			}
 		}
 	}
@@ -221,10 +221,10 @@ func (o *outputBuilder) WriteResult() {
 
 func main() {
 	var opts CmdOptions
-	clocOpts := gocloc.NewClocOptions()
+	clocOpts := ctoc.NewClocOptions()
 	// parse command line options
 	parser := flags.NewParser(&opts, flags.Default)
-	parser.Name = "gocloc"
+	parser.Name = "ctoc"
 	parser.Usage = "[OPTIONS] PATH[...]"
 
 	paths, err := flags.Parse(&opts)
@@ -233,7 +233,7 @@ func main() {
 	}
 
 	// value for language result
-	languages := gocloc.NewDefinedLanguages()
+	languages := ctoc.NewDefinedLanguages()
 
 	if opts.ShowVersion {
 		fmt.Printf("%s (%s)\n", Version, GitCommit)
@@ -258,7 +258,7 @@ func main() {
 
 	// setup option for exclude extensions
 	for _, ext := range strings.Split(opts.ExcludeExt, ",") {
-		e, ok := gocloc.Exts[ext]
+		e, ok := ctoc.Exts[ext]
 		if ok {
 			clocOpts.ExcludeExts[e] = struct{}{}
 		} else {
@@ -290,10 +290,10 @@ func main() {
 	clocOpts.Debug = opts.Debug
 	clocOpts.SkipDuplicated = opts.SkipDuplicated
 
-	processor := gocloc.NewProcessor(languages, clocOpts)
+	processor := ctoc.NewProcessor(languages, clocOpts)
 	result, err := processor.Analyze(paths)
 	if err != nil {
-		fmt.Printf("fail gocloc analyze. error: %v\n", err)
+		fmt.Printf("fail ctoc analyze. error: %v\n", err)
 		return
 	}
 

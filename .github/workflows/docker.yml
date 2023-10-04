@@ -13,6 +13,6 @@ jobs:
       - name: Lint Dockerfile
         run:  docker run --rm -i hadolint/hadolint < Dockerfile
       - name: Build Docker Container
-        run:  docker build -t gocloc .
+        run:  docker build -t ctoc .
       - name: Test Container
-        run:  docker run -v ${PWD}:/workdir gocloc .
+        run:  docker run -v ${PWD}:/workdir ctoc .

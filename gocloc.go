@@ -1,4 +1,4 @@
-package gocloc
+package ctoc
 
 // Processor is gocloc analyzing processor.
 type Processor struct {
@@ -50,6 +50,7 @@ func (p *Processor) Analyze(paths []string) (*Result, error) {
 			language.Code += cf.Code
 			language.Comments += cf.Comments
 			language.Blanks += cf.Blanks
+			language.Tokens += cf.Tokens
 			clocFiles[file] = cf
 		}
 
@@ -62,6 +63,7 @@ func (p *Processor) Analyze(paths []string) (*Result, error) {
 		total.Blanks += language.Blanks
 		total.Comments += language.Comments
 		total.Code += language.Code
+		total.Tokens += language.Tokens
 	}
 
 	return &Result{
