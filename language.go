@@ -1,4 +1,4 @@
-package gocloc
+package ctoc
 
 import (
 	"bufio"
@@ -32,6 +32,7 @@ type Language struct {
 	Code         int32
 	Comments     int32
 	Blanks       int32
+	Tokens       int32
 	Total        int32
 }
 

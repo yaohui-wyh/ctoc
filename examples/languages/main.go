@@ -3,20 +3,20 @@ package main
 import (
 	"fmt"
 
-	"github.com/hhatto/gocloc"
+	"github.com/yaohui-wyh/ctoc"
 )
 
 func main() {
-	languages := gocloc.NewDefinedLanguages()
-	options := gocloc.NewClocOptions()
+	languages := ctoc.NewDefinedLanguages()
+	options := ctoc.NewClocOptions()
 	paths := []string{
 		".",
 	}
 
-	processor := gocloc.NewProcessor(languages, options)
+	processor := ctoc.NewProcessor(languages, options)
 	result, err := processor.Analyze(paths)
 	if err != nil {
-		fmt.Printf("gocloc fail. error: %v\n", err)
+		fmt.Printf("ctoc fail. error: %v\n", err)
 		return
 	}
 

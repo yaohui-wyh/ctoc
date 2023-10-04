@@ -1,12 +1,12 @@
-project_name: gocloc
+project_name: ctoc
 env:
   - GO111MODULE=on
 before:
   hooks:
     - go mod tidy
 builds:
-  - main: 'cmd/gocloc/main.go'
-    binary: gocloc
+  - main: 'cmd/ctoc/main.go'
+    binary: ctoc
     ldflags:
       - -s -w
       - -X main.Version={{.Version}}
