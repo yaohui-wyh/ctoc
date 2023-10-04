@@ -44,6 +44,9 @@ class A:
 	if clocFile.Lang != "Python" {
 		t.Errorf("invalid logic. lang=%v", clocFile.Lang)
 	}
+	if clocFile.Tokens <= 1 {
+		t.Errorf("invalid logic. tokens=%v", clocFile.Tokens)
+	}
 }
 
 func TestAnalayzeFile4PythonInvalid(t *testing.T) {
@@ -82,6 +85,9 @@ class A:
 	}
 	if clocFile.Lang != "Python" {
 		t.Errorf("invalid logic. lang=%v", clocFile.Lang)
+	}
+	if clocFile.Tokens <= 1 {
+		t.Errorf("invalid logic. tokens=%v", clocFile.Tokens)
 	}
 }
 
@@ -125,6 +131,9 @@ func TestAnalayzeFile4PythonNoShebang(t *testing.T) {
 	if clocFile.Lang != "Python" {
 		t.Errorf("invalid logic. lang=%v", clocFile.Lang)
 	}
+	if clocFile.Tokens <= 1 {
+		t.Errorf("invalid logic. tokens=%v", clocFile.Tokens)
+	}
 }
 
 func TestAnalayzeFile4Go(t *testing.T) {
@@ -164,6 +173,9 @@ func main() {
 	}
 	if clocFile.Lang != "Go" {
 		t.Errorf("invalid logic. lang=%v", clocFile.Lang)
+	}
+	if clocFile.Tokens <= 1 {
+		t.Errorf("invalid logic. tokens=%v", clocFile.Tokens)
 	}
 }
 
@@ -206,6 +218,9 @@ func main() {
 	if clocFile.Lang != "Go" {
 		t.Errorf("invalid logic. lang=%v", clocFile.Lang)
 	}
+	if clocFile.Tokens <= 1 {
+		t.Errorf("invalid logic. tokens=%v", clocFile.Tokens)
+	}
 }
 
 func TestAnalayzeFile4GoWithCommentInnerBlockComment(t *testing.T) {
@@ -245,6 +260,9 @@ func main() {
 	if clocFile.Lang != "Go" {
 		t.Errorf("invalid logic. lang=%v", clocFile.Lang)
 	}
+	if clocFile.Tokens <= 1 {
+		t.Errorf("invalid logic. tokens=%v", clocFile.Tokens)
+	}
 }
 
 func TestAnalyzeFile4GoWithNoComment(t *testing.T) {
@@ -282,6 +300,9 @@ func TestAnalyzeFile4GoWithNoComment(t *testing.T) {
 	}
 	if clocFile.Lang != "Go" {
 		t.Errorf("invalid logic. lang=%v", clocFile.Lang)
+	}
+	if clocFile.Tokens <= 1 {
+		t.Errorf("invalid logic. tokens=%v", clocFile.Tokens)
 	}
 }
 
@@ -324,6 +345,9 @@ vo /* ff */
 	}
 	if clocFile.Lang != "ATS" {
 		t.Errorf("invalid logic. lang=%v", clocFile.Lang)
+	}
+	if clocFile.Tokens <= 1 {
+		t.Errorf("invalid logic. tokens=%v", clocFile.Tokens)
 	}
 }
 
@@ -371,6 +395,9 @@ func TestAnalyzeFile4JavaWithCommentInCodeLine(t *testing.T) {
 	}
 	if clocFile.Lang != "Java" {
 		t.Errorf("invalid logic. lang=%v", clocFile.Lang)
+	}
+	if clocFile.Tokens <= 1 {
+		t.Errorf("invalid logic. tokens=%v", clocFile.Tokens)
 	}
 }
 
@@ -421,6 +448,9 @@ func TestAnalyzeFile4Makefile(t *testing.T) {
 	if clocFile.Lang != "Makefile" {
 		t.Errorf("invalid logic. lang=%v", clocFile.Lang)
 	}
+	if clocFile.Tokens <= 1 {
+		t.Errorf("invalid logic. tokens=%v", clocFile.Tokens)
+	}
 }
 
 func TestAnalayzeReader(t *testing.T) {
@@ -449,6 +479,9 @@ class A:
 	}
 	if clocFile.Lang != "Python" {
 		t.Errorf("invalid logic. lang=%v", clocFile.Lang)
+	}
+	if clocFile.Tokens <= 1 {
+		t.Errorf("invalid logic. tokens=%v", clocFile.Tokens)
 	}
 }
 
@@ -526,5 +559,8 @@ const color = "blue"
 	}
 	if clocFile.Lang != "Imba" {
 		t.Errorf("invalid logic. lang=%v", clocFile.Lang)
+	}
+	if clocFile.Tokens <= 1 {
+		t.Errorf("invalid logic. tokens=%v", clocFile.Tokens)
 	}
 }

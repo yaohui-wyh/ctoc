@@ -42,7 +42,7 @@ var rowLen = 96
 // It is necessary to use notation that follows go-flags.
 type CmdOptions struct {
 	ByFile         bool   `long:"by-file" description:"report results for every encountered source file"`
-	SortTag        string `long:"sort" default:"code" description:"sort based on a certain column" choice:"name" choice:"files" choice:"blank" choice:"comment" choice:"code"`
+	SortTag        string `long:"sort" default:"code" description:"sort based on a certain column" choice:"name" choice:"files" choice:"blank" choice:"comment" choice:"code" choice:"tokens"`
 	OutputType     string `long:"output-type" default:"default" description:"output type [values: default,cloc-xml,sloccount,json]"`
 	ExcludeExt     string `long:"exclude-ext" description:"exclude file name extensions (separated commas)"`
 	IncludeLang    string `long:"include-lang" description:"include language name (separated commas)"`
@@ -118,6 +118,8 @@ func writeResultWithByFile(opts *CmdOptions, result *ctoc.Result) {
 		sortedFiles.SortByComments()
 	case "blank":
 		sortedFiles.SortByBlanks()
+	case "tokens":
+		sortedFiles.SortByTokens()
 	default:
 		sortedFiles.SortByCode()
 	}
@@ -191,6 +193,8 @@ func (o *outputBuilder) WriteResult() {
 			sortedLanguages.SortByComments()
 		case "blank":
 			sortedLanguages.SortByBlanks()
+		case "tokens":
+			sortedLanguages.SortByTokens()
 		default:
 			sortedLanguages.SortByCode()
 		}
