@@ -30,7 +30,7 @@ func TestOutputJSON(t *testing.T) {
 		t.Errorf("json marshal error")
 	}
 
-	actualJSONText := `{"files":[{"code":0,"comment":0,"blank":0,"name":"one.go","language":"Go"},{"code":0,"comment":0,"blank":0,"name":"two.go","language":"Go"}],"total":{"files":0,"code":0,"comment":0,"blank":0}}`
+	actualJSONText := `{"files":[{"code":0,"comment":0,"blank":0,"name":"one.go","language":"Go","tokens":0},{"code":0,"comment":0,"blank":0,"name":"two.go","language":"Go","tokens":0}],"total":{"files":0,"code":0,"comment":0,"blank":0,"tokens":0}}`
 	resultJSONText := string(buf)
 	if actualJSONText != resultJSONText {
 		t.Errorf("invalid result. '%s'", resultJSONText)

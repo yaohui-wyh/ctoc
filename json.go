@@ -45,6 +45,7 @@ func NewJSONFilesResultFromCloc(total *Language, sortedFiles ClocFiles) JSONFile
 		Code:       total.Code,
 		Comments:   total.Comments,
 		Blanks:     total.Blanks,
+		Tokens:     total.Tokens,
 	}
 
 	return JSONFilesResult{

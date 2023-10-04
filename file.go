@@ -65,6 +65,13 @@ func (cf ClocFiles) SortByCode() {
 	sort.Slice(cf, sortFunc)
 }
 
+func (cf ClocFiles) SortByTokens() {
+	sortFunc := func(i, j int) bool {
+		return cf[i].Tokens > cf[j].Tokens
+	}
+	sort.Slice(cf, sortFunc)
+}
+
 // AnalyzeFile is analyzing file, this function calls AnalyzeReader() inside.
 func AnalyzeFile(filename string, language *Language, opts *ClocOptions) *ClocFile {
 	fp, err := os.Open(filename)

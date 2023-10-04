@@ -21,6 +21,7 @@ type ClocLanguage struct {
 	Code       int32  `xml:"code,attr" json:"code"`
 	Comments   int32  `xml:"comment,attr" json:"comment"`
 	Blanks     int32  `xml:"blank,attr" json:"blank"`
+	Tokens     int32  `xml:"tokens,attr" json:"tokens"`
 }
 
 // Language is a type used to definitions and store statistics for one programming language.
@@ -79,6 +80,13 @@ func (ls Languages) SortByBlanks() {
 func (ls Languages) SortByCode() {
 	sortFunc := func(i, j int) bool {
 		return ls[i].Code > ls[j].Code
+	}
+	sort.Slice(ls, sortFunc)
+}
+
+func (ls Languages) SortByTokens() {
+	sortFunc := func(i, j int) bool {
+		return ls[i].Tokens > ls[j].Tokens
 	}
 	sort.Slice(ls, sortFunc)
 }
