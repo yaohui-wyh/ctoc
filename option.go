@@ -1,6 +1,10 @@
 package ctoc
 
-import "regexp"
+import (
+	"regexp"
+
+	"github.com/pkoukk/tiktoken-go"
+)
 
 // ClocOptions is gocloc processor options.
 type ClocOptions struct {
@@ -12,6 +16,7 @@ type ClocOptions struct {
 	ReMatch        *regexp.Regexp
 	ReNotMatchDir  *regexp.Regexp
 	ReMatchDir     *regexp.Regexp
+	Tokenizer      *tiktoken.Tiktoken
 
 	// OnCode is triggered for each line of code.
 	OnCode func(line string)
@@ -23,10 +28,12 @@ type ClocOptions struct {
 
 // NewClocOptions create new ClocOptions with default values.
 func NewClocOptions() *ClocOptions {
+	tke, _ := tiktoken.GetEncoding("cl100k_base")
 	return &ClocOptions{
 		Debug:          false,
 		SkipDuplicated: false,
 		ExcludeExts:    make(map[string]struct{}),
 		IncludeLangs:   make(map[string]struct{}),
+		Tokenizer:      tke,
 	}
 }

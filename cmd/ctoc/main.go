@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"github.com/jessevdk/go-flags"
+	"github.com/pkoukk/tiktoken-go"
 	"github.com/yaohui-wyh/ctoc"
 )
 
@@ -41,19 +42,20 @@ var rowLen = 96
 // CmdOptions is gocloc command options.
 // It is necessary to use notation that follows go-flags.
 type CmdOptions struct {
-	ByFile         bool   `long:"by-file" description:"report results for every encountered source file"`
-	SortTag        string `long:"sort" default:"code" description:"sort based on a certain column" choice:"name" choice:"files" choice:"blank" choice:"comment" choice:"code" choice:"tokens"`
-	OutputType     string `long:"output-type" default:"default" description:"output type [values: default,cloc-xml,sloccount,json]"`
-	ExcludeExt     string `long:"exclude-ext" description:"exclude file name extensions (separated commas)"`
-	IncludeLang    string `long:"include-lang" description:"include language name (separated commas)"`
-	Match          string `long:"match" description:"include file name (regex)"`
-	NotMatch       string `long:"not-match" description:"exclude file name (regex)"`
-	MatchDir       string `long:"match-d" description:"include dir name (regex)"`
-	NotMatchDir    string `long:"not-match-d" description:"exclude dir name (regex)"`
-	Debug          bool   `long:"debug" description:"dump debug log for developer"`
-	SkipDuplicated bool   `long:"skip-duplicated" description:"skip duplicated files"`
-	ShowLang       bool   `long:"show-lang" description:"print about all languages and extensions"`
-	ShowVersion    bool   `long:"version" description:"print version info"`
+	ByFile            bool   `long:"by-file" description:"report results for every encountered source file"`
+	SortTag           string `long:"sort" default:"code" description:"sort based on a certain column" choice:"name" choice:"files" choice:"blank" choice:"comment" choice:"code" choice:"tokens"`
+	OutputType        string `long:"output-type" default:"default" description:"output type [values: default,cloc-xml,sloccount,json]"`
+	ExcludeExt        string `long:"exclude-ext" description:"exclude file name extensions (separated commas)"`
+	IncludeLang       string `long:"include-lang" description:"include language name (separated commas)"`
+	Match             string `long:"match" description:"include file name (regex)"`
+	NotMatch          string `long:"not-match" description:"exclude file name (regex)"`
+	MatchDir          string `long:"match-d" description:"include dir name (regex)"`
+	NotMatchDir       string `long:"not-match-d" description:"exclude dir name (regex)"`
+	Debug             bool   `long:"debug" description:"dump debug log for developer"`
+	SkipDuplicated    bool   `long:"skip-duplicated" description:"skip duplicated files"`
+	ShowLang          bool   `long:"show-lang" description:"print about all languages and extensions"`
+	ShowVersion       bool   `long:"version" description:"print version info"`
+	TokenizerEncoding string `long:"encoding" default:"cl100k_base" description:"specify tokenizer encoding" choice:"cl100k_base" choice:"p50k_base" choice:"p50k_edit" choice:"r50k_base"`
 }
 
 type outputBuilder struct {
@@ -293,6 +295,12 @@ func main() {
 
 	clocOpts.Debug = opts.Debug
 	clocOpts.SkipDuplicated = opts.SkipDuplicated
+	tke, err := tiktoken.GetEncoding(opts.TokenizerEncoding)
+	if err != nil {
+		fmt.Printf("failed to initialize tokenizer. error: %v\n", err)
+		return
+	}
+	clocOpts.Tokenizer = tke
 
 	processor := ctoc.NewProcessor(languages, clocOpts)
 	result, err := processor.Analyze(paths)
