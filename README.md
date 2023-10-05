@@ -2,10 +2,11 @@
 
 _Count Tokens of Code_.
 
-> Token counts plays a key role in shaping an LLM's memory and conversation history.<br/>
-> **ctoc** provides a lightweight tool to analyze codebases at the token level.
->
-> Built on top of [gocloc](https://github.com/hhatto/gocloc).
+**Token counts** play a key role in shaping a Large Language Model's (LLM) memory and conversation history. They're vital for prompt engineering and token cost estimation. Various strategies in prompt engineering (e.g., contextual filtering and reranking) predominantly aim at token compression to counteract LLM's context size limit.
+
+**ctoc** provides a lightweight tool for analyzing codebases at the token level. It incorporates all the features of [cloc](https://github.com/AlDanial/cloc). (You can use `ctoc` in a `cloc`-consistent manner.)
+
+Built on top of [gocloc](https://github.com/hhatto/gocloc), ctoc is extremely fast.
 
 [![GoDoc](https://godoc.org/github.com/yaohui-wyh/ctoc?status.svg)](https://godoc.org/github.com/yaohui-wyh/ctoc)
 [![ci](https://github.com/yaohui-wyh/ctoc/workflows/Go/badge.svg)](https://github.com/yaohui-wyh/ctoc/actions)
@@ -14,14 +15,15 @@ _Count Tokens of Code_.
 <details>
 <summary>What are <b>Tokens</b>? (in the context of Large Language Model)</summary> 
 
-> https://learn.microsoft.com/en-us/semantic-kernel/prompt-engineering/tokens
-
 - **Tokens**: basic units of text/code for LLM AI models to process/generate language.
 - **Tokenization**: splitting input/output texts into smaller units for LLM AI models.
 - **Vocabulary size**: the number of tokens each model uses, which varies among different GPT models.
-- **Tokenization cost**: affects the memory and computational resources that a model needs, which influences the cost
-  and performance of running an OpenAI or Azure OpenAI model.
+- **Tokenization cost**: affects the memory and computational resources that a model needs, which influences the cost and performance of running an OpenAI or Azure OpenAI model.
+
+refs: https://learn.microsoft.com/en-us/semantic-kernel/prompt-engineering/tokens
+
 </details>
+
 
 ## Installation
 
@@ -54,6 +56,7 @@ Application Options:
       --skip-duplicated                                      skip duplicated files
       --show-lang                                            print about all languages and extensions
       --version                                              print version info
+      --show-encoding                                        print about all LLM models and their corresponding encodings
       --encoding=[cl100k_base|p50k_base|p50k_edit|r50k_base] specify tokenizer encoding (default: cl100k_base)
 
 Help Options:
@@ -73,6 +76,47 @@ Makefile                         1              6              0             15 
 ------------------------------------------------------------------------------------------------
 TOTAL                           21            301            153           2325          24476
 ------------------------------------------------------------------------------------------------
+```
+
+### Advanced Usage
+
+Specify the output type as JSON:
+
+```
+$ ctoc --output-type=json .
+{"languages":[{"name":"Go","files":16,"code":2113,"comment":155,"blank":285,"tokens":22000},{"name":"XML","files":3,"code":149,"comment":0,"blank":0,"tokens":1928},{"name":"Markdown","files":1,"code":136,"comment":0,"blank":31,"tokens":1874},{"name":"YAML","files":1,"code":40,"comment":0,"blank":0,"tokens":237},{"name":"Makefile","files":1,"code":19,"comment":0,"blank":7,"tokens":149}],"total":{"files":22,"code":2457,"comment":155,"blank":323,"tokens":26188}}
+
+# For gpt-4, the price is $0.03/1k prompt tokens
+$ echo "scale=2; 0.03*$(ctoc --output-type=json . | jq ".total.tokens")/1000" | bc
+.79
+```
+
+Print the token count for each Go file separately and sort them by token count:
+
+```
+$ ctoc --by-file --include-lang=Go --sort=tokens .
+-----------------------------------------------------------------------------------------------
+File                        files          blank        comment           code           tokens
+-----------------------------------------------------------------------------------------------
+language.go                                   31              8            647           8673
+file_test.go                                  72             13            481           4136
+cmd/ctoc/main.go                              39             16            267           2534
+file.go                                       32              7            188           1720
+utils.go                                      21              7            133            961
+utils_test.go                                 17             78             13            891
+language_test.go                              22              0             79            661
+xml.go                                        11             10             70            636
+gocloc.go                                      9              4             62            448
+json.go                                        6              4             47            402
+json_test.go                                   4              1             33            312
+option.go                                      5              5             29            266
+examples/languages/main.go                     5              0             23            131
+examples/files/main.go                         5              0             23            130
+bspool.go                                      4              0             14             72
+tools.go                                       2              2              4             27
+-----------------------------------------------------------------------------------------------
+TOTAL                          16            285            155           2113          22000
+-----------------------------------------------------------------------------------------------
 ```
 
 ## Support Languages
@@ -128,6 +172,7 @@ For additional information, please refer to [tiktoken-go#cache](https://github.c
 
 - CPU 2.6GHz 6core Intel Core i7 / 32GB 2667MHz DDR4 / MacOSX 13.5.2
 - ctoc [fdaa42](https://github.com/yaohui-wyh/ctoc/commit/fdaa42)
+- cl100k_base encoding (with BPE dictionary cached)
 
 ```
 ➜  kubernetes git:(master) time ctoc .
