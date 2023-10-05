@@ -1,5 +1,10 @@
 .PHONY: test build
 
+fmt:
+	@gofmt -w .
+	@goimports -w .
+	@go mod tidy
+
 build:
 	mkdir -p bin
 	GO111MODULE=on go build -o ./bin/ctoc cmd/ctoc/main.go

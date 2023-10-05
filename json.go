@@ -22,6 +22,7 @@ func NewJSONLanguagesResultFromCloc(total *Language, sortedLanguages Languages) 
 			Code:       language.Code,
 			Comments:   language.Comments,
 			Blanks:     language.Blanks,
+			Tokens:     language.Tokens,
 		}
 		langs = append(langs, c)
 	}
@@ -30,6 +31,7 @@ func NewJSONLanguagesResultFromCloc(total *Language, sortedLanguages Languages) 
 		Code:       total.Code,
 		Comments:   total.Comments,
 		Blanks:     total.Blanks,
+		Tokens:     total.Tokens,
 	}
 
 	return JSONLanguagesResult{

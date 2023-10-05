@@ -21,6 +21,7 @@ type XMLTotalLanguages struct {
 	Code     int32 `xml:"code,attr"`
 	Comment  int32 `xml:"comment,attr"`
 	Blank    int32 `xml:"blank,attr"`
+	Tokens   int32 `xml:"tokens,attr"`
 }
 
 // XMLResultLanguages stores the results in XML format.
@@ -34,6 +35,7 @@ type XMLTotalFiles struct {
 	Code    int32 `xml:"code,attr"`
 	Comment int32 `xml:"comment,attr"`
 	Blank   int32 `xml:"blank,attr"`
+	Tokens  int32 `xml:"tokens,attr"`
 }
 
 // XMLResultFiles stores per file results in XML format.
@@ -67,6 +69,7 @@ func NewXMLResultFromCloc(total *Language, sortedLanguages Languages, _ XMLResul
 			Code:       language.Code,
 			Comments:   language.Comments,
 			Blanks:     language.Blanks,
+			Tokens:     language.Tokens,
 		}
 		langs = append(langs, c)
 	}
@@ -74,6 +77,7 @@ func NewXMLResultFromCloc(total *Language, sortedLanguages Languages, _ XMLResul
 		Code:     total.Code,
 		Comment:  total.Comments,
 		Blank:    total.Blanks,
+		Tokens:   total.Tokens,
 		SumFiles: total.Total,
 	}
 	f := &XMLResultLanguages{
