@@ -27,10 +27,15 @@ refs: https://learn.microsoft.com/en-us/semantic-kernel/prompt-engineering/token
 
 ## Installation
 
-require Go 1.19+
-
+Install from GitHub release:
+```bash
+curl -sL "https://github.com/yaohui-wyh/ctoc/releases/download/v0.0.1/ctoc_$(uname)_$(uname -m).tar.gz" | tar xz && chmod +x ctoc && ctoc -h
 ```
-$ go install github.com/yaohui-wyh/ctoc/cmd/ctoc@latest
+
+Alternatively, you can install via `go install` (requires Go 1.19+):
+
+```bash
+go install github.com/yaohui-wyh/ctoc/cmd/ctoc@latest
 ```
 
 ## Usage
@@ -171,7 +176,7 @@ For additional information, please refer to [tiktoken-go#cache](https://github.c
 ## Performance
 
 - CPU 2.6GHz 6core Intel Core i7 / 32GB 2667MHz DDR4 / MacOSX 13.5.2
-- ctoc [fdaa42](https://github.com/yaohui-wyh/ctoc/commit/fdaa42)
+- ctoc [7473a0](https://github.com/yaohui-wyh/ctoc/commit/7473a0)
 - cl100k_base encoding (with BPE dictionary cached)
 
 ```
