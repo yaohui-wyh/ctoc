@@ -103,7 +103,7 @@ func checkOptionMatch(path string, info os.FileInfo, opts *ClocOptions) bool {
 
 // getAllFiles return all the files to be analyzed in paths.
 func getAllFiles(paths []string, languages *DefinedLanguages, opts *ClocOptions) (result map[string]*Language, err error) {
-	result = make(map[string]*Language, 0)
+	result = make(map[string]*Language)
 	fileCache := make(map[string]struct{})
 
 	for _, root := range paths {
