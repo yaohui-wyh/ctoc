@@ -9,6 +9,7 @@ import (
 
 	"github.com/jessevdk/go-flags"
 	"github.com/pkoukk/tiktoken-go"
+
 	"github.com/yaohui-wyh/ctoc"
 )
 
