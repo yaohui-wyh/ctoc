@@ -136,42 +136,78 @@ $ ctoc --show-lang
 
 ```
 $ ctoc --show-encoding
-text-davinci-002               (p50k_base)
-text-davinci-001               (r50k_base)
-babbage                        (r50k_base)
-text-babbage-001               (r50k_base)
-code-cushman-002               (p50k_base)
-code-search-ada-code-001       (r50k_base)
-text-davinci-003               (p50k_base)
-davinci                        (r50k_base)
-text-similarity-ada-001        (r50k_base)
-text-curie-001                 (r50k_base)
-curie                          (r50k_base)
-ada                            (r50k_base)
-code-davinci-002               (p50k_base)
-text-davinci-edit-001          (p50k_edit)
 text-embedding-ada-002         (cl100k_base)
-text-similarity-curie-001      (r50k_base)
-text-similarity-babbage-001    (r50k_base)
-gpt2                           (gpt2)
-gpt-4                          (cl100k_base)
-text-ada-001                   (r50k_base)
-code-davinci-001               (p50k_base)
-text-search-davinci-doc-001    (r50k_base)
-text-search-curie-doc-001      (r50k_base)
 code-search-babbage-code-001   (r50k_base)
+gpt-3.5-turbo                  (cl100k_base)
+text-embedding-3-large         (cl100k_base)
+gpt2                           (gpt2)
+babbage                        (r50k_base)
+code-cushman-002               (p50k_base)
+text-similarity-davinci-001    (r50k_base)
+text-similarity-curie-001      (r50k_base)
+text-similarity-ada-001        (r50k_base)
+text-search-ada-doc-001        (r50k_base)
 code-cushman-001               (p50k_base)
 cushman-codex                  (p50k_base)
-code-davinci-edit-001          (p50k_edit)
-gpt-3.5-turbo                  (cl100k_base)
-text-similarity-davinci-001    (r50k_base)
-text-search-babbage-doc-001    (r50k_base)
-text-search-ada-doc-001        (r50k_base)
+gpt-4                          (cl100k_base)
+text-davinci-002               (p50k_base)
+text-davinci-001               (r50k_base)
 davinci-codex                  (p50k_base)
+text-search-babbage-doc-001    (r50k_base)
+text-davinci-003               (p50k_base)
+text-curie-001                 (r50k_base)
+text-babbage-001               (r50k_base)
+text-ada-001                   (r50k_base)
+code-davinci-002               (p50k_base)
+text-davinci-edit-001          (p50k_edit)
+text-search-davinci-doc-001    (r50k_base)
+code-search-ada-code-001       (r50k_base)
+davinci                        (r50k_base)
+curie                          (r50k_base)
+code-davinci-001               (p50k_base)
+gpt-4o                         (o200k_base)
+ada                            (r50k_base)
+code-davinci-edit-001          (p50k_edit)
+text-embedding-3-small         (cl100k_base)
+text-similarity-babbage-001    (r50k_base)
+text-search-curie-doc-001      (r50k_base)
 ```
 
 The BPE dictionary is automatically downloaded and cached upon its initial run for each encoding.<br/>
 For additional information, please refer to [tiktoken-go#cache](https://github.com/pkoukk/tiktoken-go#cache)
+
+## Specify Tokenizer Encoding
+
+You can specify the encoding with the `--encoding` flag:
+
+- `cl100k_base` is the default encoding for `gpt-4`, `gpt-4-turbo`, `gpt-3.5-turbo`.
+- `o200k_base` is the default encoding for `gpt-4o`. 
+
+```
+$ ctoc --encoding=cl100k_base .
+------------------------------------------------------------------------------------------------
+Language                     files          blank        comment           code           tokens
+------------------------------------------------------------------------------------------------
+Go                              16            286            155           2113          21995
+Markdown                         1             42              0            183           2585
+YAML                             1              0              0             40            237
+Makefile                         1              7              0             19            149
+------------------------------------------------------------------------------------------------
+TOTAL                           19            335            155           2355          24966
+------------------------------------------------------------------------------------------------
+
+$ ctoc --encoding=o200k_base .
+------------------------------------------------------------------------------------------------
+Language                     files          blank        comment           code           tokens
+------------------------------------------------------------------------------------------------
+Go                              16            286            155           2113          22109
+Markdown                         1             42              0            183           2596
+YAML                             1              0              0             40            237
+Makefile                         1              7              0             19            150
+------------------------------------------------------------------------------------------------
+TOTAL                           19            335            155           2355          25092
+------------------------------------------------------------------------------------------------
+```
 
 ## Performance
 
