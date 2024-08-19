@@ -57,7 +57,7 @@ type CmdOptions struct {
 	ShowLang              bool   `long:"show-lang" description:"print about all languages and extensions"`
 	ShowVersion           bool   `long:"version" description:"print version info"`
 	ShowTokenizerEncoding bool   `long:"show-encoding" description:"print about all LLM models and their corresponding encodings"`
-	TokenizerEncoding     string `long:"encoding" default:"cl100k_base" description:"specify tokenizer encoding" choice:"cl100k_base" choice:"p50k_base" choice:"p50k_edit" choice:"r50k_base"`
+	TokenizerEncoding     string `long:"encoding" default:"cl100k_base" description:"specify tokenizer encoding" choice:"o200k_base" choice:"cl100k_base" choice:"p50k_base" choice:"p50k_edit" choice:"r50k_base"`
 }
 
 type outputBuilder struct {
